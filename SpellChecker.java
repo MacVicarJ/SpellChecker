@@ -3,30 +3,47 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-
+/**
+ * A class spell checks a file by comparing its contents with
+ * a dictionary.
+ * @author Scott Austin, Jack MacVicar
+ */
 public class SpellChecker
 {	
-	BagInterface<String> dictionary;
+	private static final int DICTIONARY_LENGTH = 100000;
+	private BagInterface<String> dictionary;
 	
-	File fileOne = new File("The-lancashire-cotton-famine.txt");
-	File fileTwo = new File("wit-attendance-policy.txt");
-	
-	SpellChecker() throws FileNotFoundException
+	/**
+	 * Create a SpellChecker class with a dictionary supplied by a file
+	 * @param dictionaryFile  file that contains dictionary words separated by whitespace
+	 * @throws FileNotFoundException
+	 */
+	SpellChecker(File dictionaryFile) throws FileNotFoundException
 	{
-		Scanner sc = new Scanner(new File("american-english-JL.txt"));
-		dictionary = new ResizableArrayBag<String>();
-		
-		while (sc.hasNextLine()) {
-		  dictionary.add(sc.nextLine());
-		}
-		sc.close();
-    }
+		dictionary = new ResizableArrayBag<String>(DICTIONARY_LENGTH);
 	
-	public BagInterface<String> spellCheckFile(File f) throws FileNotFoundException
+		Scanner sc = new Scanner(dictionaryFile);
+		while (sc.hasNextLine())
+		{
+		  dictionary.add(sc.nextLine());
+		} // end while
+		sc.close();
+		
+    } // end constructor
+	
+	/**
+	 * Reads a file and checks the contents for misspelled words and returns a bag 
+	 * containing one instance of each misspelled word.
+	 * @param file  The file to spell check.
+	 * @return  A BagInterface<String> that contains one instance of each of the 
+	 *          misspelled words found in the file.
+	 * @throws FileNotFoundException
+	 */
+	public BagInterface<String> spellCheckFile(File file) throws FileNotFoundException
 	{
 		BagInterface<String> misspelledWords = new ResizableArrayBag<String>();
 		String word;
-		Scanner sc = new Scanner(f);
+		Scanner sc = new Scanner(file);
 		sc.useDelimiter("[\\s+.,;-]+");  // do not include punctuation in tokens
 		
 		while (sc.hasNext())
@@ -53,12 +70,5 @@ public class SpellChecker
 		
 		return misspelledWords;
 	} // end spellCheckFile()
-
-}
-
-
-
-
-
-
-
+	
+} // end SpellChecker
