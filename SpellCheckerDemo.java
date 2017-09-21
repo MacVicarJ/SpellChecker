@@ -2,39 +2,45 @@ package edu.wit.dcsn.comp2000.bagadt;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-	/**
-	 * Used to execute the spell checker
-	 * @author Erich Hauntsman
-	 */
+/**
+ * Runs a demonstration of the SpellChecker
+ * @author Erich Hauntsman
+ */
 public class SpellCheckerDemo
 {
+	private static final String DICTIONARY_FILENAME = "american-english-JL.txt";
+	private static final String TEST_FILE_ONE = "wit-attendance-policy.txt";
+	private static final String TEST_FILE_TWO = "the-lancashire-cotton-famine.txt";
+	
 	private static SpellChecker spellChecker;
 	
 	/**
-	 * Executes the methods from the spell checker class
-	 * @param args
+	 * Runs a demonstration of the SpellChecker class
+	 * @param args  -unused-
 	 * @throws FileNotFoundException 
 	 */
 	public static void main(String[]args) throws FileNotFoundException
 	{
-		/* 
-		 * pass in file name dictionary using scanner
-		 * spell check file and put them in bag of misspelled words
-		 * display the misspelled words
-		 * 
-		 */	
 		System.out.println("Starting the Spell Checker Demo...");
-        spellChecker = new SpellChecker();
+        spellChecker = new SpellChecker(new File(DICTIONARY_FILENAME));
         
-        checkFile(new File("wit-attendance-policy.txt"));
-        checkFile(new File("the-lancashire-cotton-famine.txt"));
-	}//end main
+        checkFile(new File(TEST_FILE_ONE));
+        checkFile(new File(TEST_FILE_TWO));
+        
+	} //end main()
 	
-	private static void checkFile(File f) throws FileNotFoundException
+	/**
+	 * Runs the spell checker on a specified file and prints to the console the
+	 * number of misspelled words found and a list of all the words. 
+	 * @param file  The file to run the spell checker on.
+	 * @throws FileNotFoundException
+	 */
+	private static void checkFile(File file) throws FileNotFoundException
 	{
 		System.out.println();
-		System.out.println("Spell checking file: \"" + f.getName() + "\".");
-		BagInterface<String> misspelledWords = spellChecker.spellCheckFile(f);
+		System.out.println("Spell checking file: \"" + file.getName() + "\".");
+		
+		BagInterface<String> misspelledWords = spellChecker.spellCheckFile(file);
         
 		System.out.printf("There are %d misspelled words.%n", misspelledWords.getCurrentSize());
 		if (!misspelledWords.isEmpty())
@@ -46,5 +52,7 @@ public class SpellCheckerDemo
 				System.out.println(word);	
 			}//end while
 		} // end if
+		
 	} // end checkFile()
+	
 } // end SpellCheckerDemo
